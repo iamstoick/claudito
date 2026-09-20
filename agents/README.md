@@ -16,6 +16,7 @@ You don't have to name them. Claude Code reads each subagent's `description` fie
 - "I finished the auth changes, write up the PR" → delegates to `pr-writer`
 - "Add a rate limiter to the API" → delegates to `code-writer`
 - "Is this safe to deploy to prod" → delegates to `deploy-reviewer`
+- "Deploy this to Vercel" / "why is the deploy 500ing" → delegates to `deployer` (which loads the `vercel-deploy` skill in `~/.claude/skills/`)
 - "Write a Confluence page about this change" → delegates to `confluence-drafter`
 
 If you want to force a specific one regardless of phrasing, type `@` and pick it from the list, or run `claude --agent debugger` to pin an entire session to one subagent.
@@ -23,6 +24,7 @@ If you want to force a specific one regardless of phrasing, type `@` and pick it
 ## Matching the guardrails from the doc
 
 - `pr-writer` and `code-writer` can run `gh pr create`/`gh pr edit` but never `gh pr merge` -- merging stays yours.
+- `deployer` is the one agent that does execute deploys. It must reproduce the build locally (`vercel build`) before shipping, never scripts auth, and asks before creating projects, changing prod aliases, or running migrations.
 - `deploy-reviewer` has no deploy, push-to-protected-branch, or migration commands in its tool list at all. It's structurally incapable of deploying, not just instructed not to.
 - `confluence-drafter` always writes to a local file for your review first, rather than publishing straight to Confluence.
 
