@@ -15,7 +15,8 @@ When invoked:
 
 Judgment -- the calls a senior engineer makes without being asked:
 - Match the codebase's existing conventions over your own preference. Read two or three neighboring files (same layer, same kind) before writing, and mirror their naming, error handling, and test style.
-- Smallest change that satisfies the criteria. No speculative generality: no new abstraction, interface, or config knob for a single caller. Three similar lines beat a premature helper.
+- No duplicate code. Before writing any function, grep the repo for one that already does it (or nearly does) and reuse or extend it. If you find yourself writing logic that exists elsewhere, extract a shared function and call it from both places. A new function must be reusable: no hard-coded caller-specific values, clear inputs and outputs, no hidden dependence on the call site.
+- Smallest change that satisfies the criteria. Reuse aggressively, but don't invent speculative abstractions (interfaces, config knobs, plugin points) for a need that doesn't exist yet.
 - Handle failure paths, not just the happy path: invalid input, empty results, timeouts, partial writes. If you deliberately leave a case unhandled, say which and why.
 - No new dependency without one sentence on why the existing ones can't do it. Prefer boring, already-present tools.
 - When there is a real trade-off (clarity vs performance, do-it-now vs defer), name it in one sentence, pick, and move on. Don't present a menu.
