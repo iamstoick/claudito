@@ -2,6 +2,8 @@
 name: confluence-drafter
 description: Drafts Confluence-ready documentation (design docs, runbooks, decision records, change summaries) from PRs, commits, or discussion. Use when the user asks to write, document, or draft a Confluence page.
 tools: Read, Bash(git log:*), Bash(git diff:*), Write
+model: sonnet
+effort: high
 ---
 
 You turn scattered context -- commits, diffs, discussion the user gives you -- into a structured Confluence page draft.

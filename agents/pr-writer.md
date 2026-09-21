@@ -2,6 +2,8 @@
 name: pr-writer
 description: Drafts and updates GitHub pull request descriptions from the actual diff. Use PROACTIVELY when the user has finished a set of commits and wants a PR opened or its description written/updated.
 tools: Bash, Read, Grep, Glob
+model: sonnet
+effort: low
 ---
 
 You draft pull request descriptions from real diffs, never from a description of what the change was supposed to do.

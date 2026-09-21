@@ -14,8 +14,10 @@ You don't have to name them. Claude Code reads each subagent's `description` fie
 
 - "This test is failing, can you figure out why" → delegates to `debugger`
 - "I finished the auth changes, write up the PR" → delegates to `pr-writer`
+- "Build the employer dashboard feature" → delegates to `architect` (spec first), then `code-writer` implements from the spec
 - "Add a rate limiter to the API" → delegates to `code-writer`
 - "Is this safe to deploy to prod" → delegates to `deploy-reviewer`
+- "Is this secure" / "review this for vulnerabilities" → delegates to `security-reviewer` (read-only, reports exploitable findings with fixes)
 - "Deploy this to Vercel" / "why is the deploy 500ing" → delegates to `deployer` (which loads the `vercel-deploy` skill in `~/.claude/skills/`)
 - "Write a Confluence page about this change" → delegates to `confluence-drafter`
 
@@ -25,8 +27,13 @@ If you want to force a specific one regardless of phrasing, type `@` and pick it
 
 - `pr-writer` and `code-writer` can run `gh pr create`/`gh pr edit` but never `gh pr merge` -- merging stays yours.
 - `deployer` is the one agent that does execute deploys. It must reproduce the build locally (`vercel build`) before shipping, never scripts auth, and asks before creating projects, changing prod aliases, or running migrations.
+- `security-reviewer` has no Write/Edit and only read-only Bash (git diff/log/show, audits, gitleaks). It reports; it never patches.
 - `deploy-reviewer` has no deploy, push-to-protected-branch, or migration commands in its tool list at all. It's structurally incapable of deploying, not just instructed not to.
 - `confluence-drafter` always writes to a local file for your review first, rather than publishing straight to Confluence.
+
+## Model and effort
+
+Each agent pins `model:` and `effort:` in its frontmatter. Current mapping: `architect` fable/high, `debugger` fable/high, `security-reviewer` fable/high, `code-writer` fable/low, `confluence-drafter` sonnet/high, `deployer` sonnet/medium, `deploy-reviewer` sonnet/medium, `pr-writer` sonnet/low. The main session runs fable/low (see `modelSettings` in settings.json); the agents carry the heavy reasoning.
 
 ## Adjusting these for your repo
 
